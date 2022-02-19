@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.0.2",
         "fruitcake/laravel-cors": "^2.0.5",
+        "genl/matice": "^1.1",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.5.4",
         "laravel/framework": "^9.0",
