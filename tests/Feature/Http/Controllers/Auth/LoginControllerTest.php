@@ -40,6 +40,6 @@ class LoginControllerTest extends TestCase
                 'email' => 'test@email.com',
                 'password' => '123123'
             ])
-            ->assertSessionHasErrors(['email' => __('auth.login_error_message')]);
+            ->assertSessionHasErrors(['email']);
     }
 }
