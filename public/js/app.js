@@ -194,6 +194,24 @@ var map = {
 		"./resources/js/Pages/Auth/Login.vue",
 		"/js/vendor",
 		"resources_js_Pages_Auth_Login_vue"
+	],
+	"./Auth/Register": [
+		"./resources/js/Pages/Auth/Register.vue",
+		"/js/vendor",
+		"resources_js_Pages_Auth_Register_vue"
+	],
+	"./Auth/Register.vue": [
+		"./resources/js/Pages/Auth/Register.vue",
+		"/js/vendor",
+		"resources_js_Pages_Auth_Register_vue"
+	],
+	"./Dashboard": [
+		"./resources/js/Pages/Dashboard.vue",
+		"resources_js_Pages_Dashboard_vue"
+	],
+	"./Dashboard.vue": [
+		"./resources/js/Pages/Dashboard.vue",
+		"resources_js_Pages_Dashboard_vue"
 	]
 };
 function webpackAsyncContext(req) {
