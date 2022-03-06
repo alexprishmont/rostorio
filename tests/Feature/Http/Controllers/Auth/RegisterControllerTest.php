@@ -54,7 +54,11 @@ class RegisterControllerTest extends TestCase
         $this->from('/sign-up')
             ->post('/sign-up', $this->credentials)
             ->assertRedirect(route('dashboard.index'))
-            ->assertSessionHas('message', ['success' => __('auth.registration_success')]);
+            ->assertSessionHas('flash', [
+                'type' => 'success',
+                'header' => __('app.success_action'),
+                'text' => __('auth.registration_success')
+            ]);
     }
 
     public function test_it_dispatches_event_after_success_registration(): void

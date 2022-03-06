@@ -4,40 +4,29 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Spatie\Permission\Models\Role;
 
 class HandleInertiaRequests extends Middleware
 {
-    /**
-     * The root template that's loaded on the first page visit.
-     *
-     * @see https://inertiajs.com/server-side-setup#root-template
-     * @var string
-     */
     protected $rootView = 'app';
 
-    /**
-     * Determines the current asset version.
-     *
-     * @see https://inertiajs.com/asset-versioning
-     * @param  \Illuminate\Http\Request  $request
-     * @return string|null
-     */
-    public function version(Request $request): ?string
-    {
-        return parent::version($request);
-    }
-
-    /**
-     * Defines the props that are shared by default.
-     *
-     * @see https://inertiajs.com/shared-data
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            //
+            'auth' => function () use ($request): ?array {
+                $user = $request->user();
+                $user?->load(['roles', 'permissions']);
+
+                return [
+                    'user' => $user,
+                    'photo' => asset('images/user-no-photo.jpg'),
+                ];
+            },
+            'flash' => fn (): ?array => $request->session()->get('flash'),
+            'roles' => [
+                'existing' => fn (): ?array => Role::all()->pluck('name')->toArray(),
+            ],
+            'breadcrumbs' => fn (Request $request): array => $request->route()->breadcrumbs()->jsonSerialize(),
         ]);
     }
 }

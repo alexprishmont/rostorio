@@ -15,7 +15,12 @@ class UserLoginAction
         if (Auth::attempt($credentials)) {
             Request::session()->regenerate();
 
-            return redirect()->intended('/dashboard');
+            return redirect()->intended('/dashboard')
+                ->with('flash', [
+                    'type' => 'success',
+                    'header' => __('app.success_action'),
+                    'text' => __('auth.login_success'),
+                ]);
         }
 
         return back()->withErrors([
