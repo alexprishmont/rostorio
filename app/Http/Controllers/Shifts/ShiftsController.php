@@ -67,7 +67,7 @@ class ShiftsController extends Controller
             );
         }
 
-        if (! empty($errors)) {
+        if (!empty($errors)) {
             return back()->withErrors($errors);
         }
 
@@ -111,7 +111,7 @@ class ShiftsController extends Controller
             );
         }
 
-        if (! empty($errors)) {
+        if (!empty($errors)) {
             return back()->withErrors($errors);
         }
 
@@ -130,8 +130,10 @@ class ShiftsController extends Controller
         ]);
     }
 
-    public function getByDate(string $date)
+    public function getByDate(Request $request, string $date)
     {
+        $query = $request->query();
+
         $date = Carbon::parse($date);
 
         $startOfMonth = $date->copy()->startOfMonth();
@@ -139,8 +141,15 @@ class ShiftsController extends Controller
 
         $shifts = Shift::query()
             ->whereBetween('starts_at', [$startOfMonth, $endOfMonth])
-            ->where('company_id', Auth::user()->company_id)
-            ->get();
+            ->where('company_id', Auth::user()->company_id);
+
+        if (empty($query)) {
+            $shifts = $shifts->get();
+        }
+
+        if (! empty($query) && isset($query['userId'])) {
+            $shifts = $shifts->where('user_id', $query['userId'])->get();
+        }
 
         return ShiftResource::collection($shifts);
     }

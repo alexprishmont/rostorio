@@ -15,7 +15,7 @@
         </div>
       </section>
       <Calendar
-        :events="shifts"
+        :events="schedule"
         :date-click="dateClick"
         :dates-set="datesSet"
       />
@@ -54,19 +54,37 @@ import Calendar from '@/Components/Calendar';
 import ActionLink from '@/Components/ActionLink';
 import { ClipboardListIcon } from '@heroicons/vue/solid';
 import { useShifts } from '@/Composables/useShifts';
+import {ref} from 'vue';
+import {usePage} from '@inertiajs/inertia-vue3';
 
-defineProps({
+const props = defineProps({
     shifts: Array,
 });
 
-const dateClick = info => {
+const schedule = ref(props.shifts);
+const currentDate = ref(null);
+
+
+const dateClick = async info => {
     if (info.view.type === 'dayGridMonth') {
         info.view.calendar.changeView('timeGridDay', info.dateStr);
     }
 };
 
-const datesSet = info => {
+const datesSet = async info => {
+    if (new Date(currentDate.value).getTime() === new Date(info.start).getTime()) {
+        return;
+    }
 
+    currentDate.value = info.start;
+
+    const { getShiftByUser } = useShifts();
+
+    schedule.value = await getShiftByUser(new Date(info.start).toLocaleDateString('lt-LT', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+    }), usePage().props.value.auth.user.id);
 };
 
 </script>

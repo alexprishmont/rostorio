@@ -10,7 +10,17 @@ export function useShifts() {
         return data;
     };
 
+    const getShiftByUser = async (date, userId) => {
+        let data = [];
+        await axios.get(`/shifts/getByDate/${date}?userId=${userId}`).then(response => {
+            data = response.data;
+        });
+
+        return data;
+    };
+
     return {
         getShift,
+        getShiftByUser
     };
 }
