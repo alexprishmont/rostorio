@@ -23,9 +23,6 @@ class HandleInertiaRequests extends Middleware
                 ];
             },
             'flash' => fn (): ?array => $request->session()->get('flash'),
-            'roles' => [
-                'existing' => fn (): ?array => Role::all()->pluck('name')->toArray(),
-            ],
             'breadcrumbs' => fn (Request $request): array => $request->route()->breadcrumbs()->jsonSerialize(),
         ]);
     }

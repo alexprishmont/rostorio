@@ -1,24 +1,27 @@
 <template>
-    <nav :class="classProp">
-        <NavLink
-            link="/dashboard"
-            component="Dashboard"
-        >
-            Dashboard
-        </NavLink>
-        <NavLink
-            link="/employees"
-            component="Employees/*"
-        >
-            Employees
-        </NavLink>
-    </nav>
+  <nav :class="classProp">
+    <NavLink
+      link="/dashboard"
+    >
+      Dashboard
+    </NavLink>
+    <NavLink
+      link="/company"
+    >
+      Company
+    </NavLink>
+    <NavLink
+      link="/profile/work"
+    >
+      My work
+    </NavLink>
+  </nav>
 </template>
 
 <script setup>
-import NavLink from '@/Shared/NavLink'
+import NavLink from '@/Components/NavLink';
 
 defineProps({
     classProp: String,
-})
+});
 </script>

@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Shifts\Request;
+use App\Models\Shifts\Shift;
 use App\Traits\HasAddress;
 use App\Traits\HasOnlineStatus;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
@@ -39,6 +42,16 @@ class User extends Authenticatable
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function shiftRequests(): HasMany
+    {
+        return $this->hasMany(Request::class);
+    }
+
+    public function shifts(): HasMany
+    {
+        return $this->hasMany(Shift::class);
     }
 
     protected function password(): Attribute
