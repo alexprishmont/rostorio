@@ -7,11 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Employees\StoreEmployeeRequest;
 use App\Http\Requests\Employees\UpdateEmployeeRequest;
 use App\Http\Resources\EmployeeResource;
+use App\Http\Resources\RoleResource;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Permission\Models\Role;
@@ -91,6 +93,11 @@ class EmployeesController extends Controller
         return Inertia::render('Companies/Employees/Show', [
             'employee' => new EmployeeResource($employee),
             'totalWorkHours' => $shiftTime * $shiftsCount,
+            'roles' => RoleResource::collection(
+                Role::query()
+                    ->where('guard_name', 'company_'.$employee->company->id)
+                    ->get()
+            ),
         ]);
     }
 
@@ -98,26 +105,70 @@ class EmployeesController extends Controller
     {
         $attributes = $request->validated();
 
-        $fullname = $attributes['fullname'];
-        unset($attributes['fullname']);
+        if (Arr::has($attributes, 'fullname')) {
+            $fullname = $attributes['fullname'];
+            $fullname = explode(' ', $fullname);
 
-        $fullname = explode(' ', $fullname);
+            $attributes = array_merge($attributes, [
+                'firstname' => $fullname[0],
+                'lastname' => $fullname[1],
+            ]);
 
-        $attributes = array_merge($attributes, [
-            'firstname' => $fullname[0],
-            'lastname' => $fullname[1],
-        ]);
+            $employee->update($attributes);
+        }
 
-        $addressAttributes = Arr::get($attributes, 'address');
-        unset($attributes['address']);
-
-        $employee->update($attributes);
-        $employee->address->update($addressAttributes);
+        if (Arr::has($attributes, 'address')) {
+            $addressAttributes = Arr::get($attributes, 'address');
+            $employee->address->update($addressAttributes);
+        }
 
         return back()->with('flash', [
             'type' => 'success',
             'header' => __('app.success_action'),
             'text' => 'Employee has ben updated.',
+        ]);
+    }
+
+    public function addRole(Request $request, User $employee): RedirectResponse
+    {
+        $roleAttributes = $request->all();
+        $role = Role::query()
+            ->where('name', $roleAttributes['name'])
+            ->where('guard_name', 'company_'.$employee->company->id)
+            ->first();
+
+        if (! $role) {
+            return back()->withErrors(['Employee already has the role']);
+        }
+
+        if ($employee->hasRole($role)) {
+            return back()->withErrors(['Employee already has the role']);
+        }
+
+        $employee->assignRole($role);
+
+        return back()->with('flash', [
+            'type' => 'success',
+            'header' => __('app.success_action'),
+            'text' => __('app.success_action'),
+        ]);
+    }
+
+    public function removeRole(Request $request, User $employee): RedirectResponse
+    {
+        $attributes = $request->all();
+
+        if ($employee->roles()->count() <= 1) {
+            return back()->withErrors(['Cannot remove last role.']);
+        }
+
+        $role = Role::findById($attributes['id']);
+        $employee->removeRole($role);
+
+        return back()->with('flash', [
+            'type' => 'success',
+            'header' => __('app.success_action'),
+            'text' => 'Role removed.',
         ]);
     }
 }

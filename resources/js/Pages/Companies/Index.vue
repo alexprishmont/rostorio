@@ -1,5 +1,5 @@
 <template>
-  <Head title="Organization" />
+  <Head title="Įmonė" />
   <TwoColumnsLayout>
     <template #left>
       <ErrorAlert />
@@ -11,30 +11,36 @@
               {{ company.name }}
             </h3>
             <p class="mt-1 max-w-2xl text-sm text-gray-500">
-              Organization information
+              Įmonės informacija
             </p>
           </div>
           <form @submit.prevent="saveCompany">
             <div>
               <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                <div class="sm:col-span-6">
+                <div
+                  class="sm:col-span-6"
+                >
                   <Input
                     v-model="companyForm.name"
                     id-name="company-name"
                     type="text"
+                    :is-disabled="canAccess(['admin']) ? false : true"
                   >
-                    Organization name
+                    Pavadinimas
                   </Input>
                 </div>
               </div>
 
-              <div class="mt-3 grid grid-cols-2 gap-y-6 gap-x-4 sm:grid-cols-6">
+              <div
+                v-show="canAccess(['admin'])"
+                class="mt-3 grid grid-cols-2 gap-y-6 gap-x-4 sm:grid-cols-6"
+              >
                 <div class="sm:col-span-2">
                   <DefaultButton
                     type="submit"
                     :is-loading="companyForm.processing"
                   >
-                    Save
+                    Išsaugoti
                   </DefaultButton>
                 </div>
               </div>
@@ -47,39 +53,44 @@
         <div class="p-6 space-y sm:space-y-5">
           <div>
             <h3 class="text-lg leading-6 font-medium text-gray-900">
-              Work shifts
+              Pamainos
             </h3>
             <p class="mt-1 max-w-2xl text-sm text-gray-500">
-              Set when your shifts start and end
+              Nustatykite kada prasideda ir pasibaigia pamainos.
             </p>
           </div>
           <form @submit.prevent="saveShiftsTime">
             <div class="flex justify-between">
               <div>
                 <span class="text-sm text-gray-500 font-semibold">
-                  Shifts starts at
+                  Pradžia
                 </span>
                 <Datepicker
                   v-model="shiftsTimeForm.shifts_begins_at"
                   time-picker
+                  :disabled="canAccess(['admin']) ? false : true"
                 />
               </div>
               <div>
                 <span class="text-sm text-gray-500 font-semibold">
-                  Shifts ends at
+                  Pabaiga
                 </span>
                 <Datepicker
                   v-model="shiftsTimeForm.shifts_ends_at"
                   time-picker
+                  :disabled="canAccess(['admin']) ? false : true"
                 />
               </div>
             </div>
-            <div class="mt-3">
+            <div
+              v-show="canAccess(['admin'])"
+              class="mt-3"
+            >
               <DefaultButton
                 type="submit"
                 :is-loading="shiftsTimeForm.processing"
               >
-                Save
+                Išsaugoti
               </DefaultButton>
             </div>
           </form>
@@ -92,7 +103,7 @@
         class="rounded-lg bg-gray-200 overflow-hidden shadow divide-y divide-gray-200 sm:divide-y-0 sm:grid sm:grid-cols-1 sm:gap-px"
       >
         <h2 class="sr-only">
-          Actions
+          Veiksmai
         </h2>
         <div
           class="rounded-tl-lg rounded-tr-lg sm:rounded-tr-none relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:border-cyan-500"
@@ -102,6 +113,7 @@
             :key="action.title"
             :icon="action.icon"
             :link="action.url"
+            :can-access="action.canAccess"
           >
             <template #title>
               {{ action.title }}
@@ -125,12 +137,14 @@ import Input from '@/Components/Inputs/Input';
 import {UserGroupIcon, BadgeCheckIcon, CalendarIcon} from '@heroicons/vue/solid';
 import {useForm} from '@inertiajs/inertia-vue3';
 import Datepicker from '@vuepic/vue-datepicker';
-import {onMounted, ref} from 'vue';
+import {ref} from 'vue';
+import {useCanAccess} from '@/Composables/useCanAccess';
 
 const props = defineProps({
     company: Object,
-    can: Object,
 });
+
+const { canAccess } = useCanAccess();
 
 const companyForm = useForm({
     name: props.company.name,
@@ -157,29 +171,25 @@ const saveCompany = () => {
 
 const availableActions = ref([
     {
-        permission: 'manage_roles',
-        title: 'Manage roles',
-        description: 'You can manage your organization roles & permissions.',
+        title: 'Valdyti rolės',
+        description: 'Vartotojų rolių nustatymai',
         url: '/company/roles',
         icon: BadgeCheckIcon,
+        canAccess: 'admin,moderator',
     },
     {
-        permission: 'manage_employees',
-        title: 'Manage employees',
-        description: 'You can manage your company\'s employees.',
+        title: 'Valdyti darbuotojus',
+        description: 'Valdyti įmonei priklausančias darbuotojų paskyras.',
         url: '/company/employees',
         icon: UserGroupIcon,
+        canAccess: 'admin,moderator',
     },
     {
-        permission: 'manage_next_month_schedule',
-        title: 'Manage schedule',
-        description: 'You can manage scheduling for company\'s workers.',
+        title: 'Valdyti darbo grafiką',
+        description: 'Darbo grafiko redagavimas, generavimas.',
         url: '/shifts/create',
         icon: CalendarIcon,
+        canAccess: 'admin,moderator',
     },
 ]);
-
-onMounted(() => {
-    availableActions.value = availableActions.value.filter(action => props.can[action.permission]);
-});
 </script>

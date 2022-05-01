@@ -10,12 +10,12 @@
       <li>
         <div>
           <Link
-            href="/dashboard"
+            href="/profile/work"
             class="transition text-white hover:text-cyan-100"
           >
             <HomeIcon class="flex-shrink-0 h-5 w-5" />
           </Link>
-          <span class="sr-only">Dashboard</span>
+          <span class="sr-only">My work</span>
         </div>
       </li>
       <li

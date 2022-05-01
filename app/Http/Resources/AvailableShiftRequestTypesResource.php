@@ -10,6 +10,12 @@ final class AvailableShiftRequestTypesResource extends BaseResource
 {
     public function toArray($request)
     {
-        return ShiftRequestTypes::cases();
+        $available = [];
+
+        foreach (ShiftRequestTypes::cases() as $case) {
+            $available[$case->value] = __('requests.'.$case->value);
+        }
+
+        return $available;
     }
 }

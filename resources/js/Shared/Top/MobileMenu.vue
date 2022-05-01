@@ -28,7 +28,7 @@
         <div class="px-1 py-1">
           <MenuItem v-slot="{ active }">
             <Link
-              href="/dashboard"
+              href="/profile/work"
               :class="[
                 active ? 'bg-cyan-600 text-white' : 'text-gray-900','group flex rounded-md items-center w-full px-2 py-2 text-sm',
               ]"
@@ -38,7 +38,7 @@
                 class="w-5 h-5 mr-2 text-sky-800"
                 aria-hidden="true"
               />
-              Dashboard
+              Pradinis
             </Link>
           </MenuItem>
         </div>
@@ -55,7 +55,7 @@
                 class="w-5 h-5 mr-2 text-sky-800"
                 aria-hidden="true"
               />
-              Notifications
+              Pranešimai
             </Link>
           </MenuItem>
           <MenuItem v-slot="{ active }">
@@ -71,7 +71,7 @@
                 class="w-5 h-5 mr-2 text-sky-800"
                 aria-hidden="true"
               />
-              Sign out
+              Atsijungti
             </Link>
           </MenuItem>
         </div>

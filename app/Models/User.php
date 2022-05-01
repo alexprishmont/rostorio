@@ -60,4 +60,9 @@ class User extends Authenticatable
             set: fn (string $value): string => Hash::make($value),
         );
     }
+
+    public function guardName(): string
+    {
+        return 'company_'.$this->company->id;
+    }
 }

@@ -29,6 +29,8 @@ class ShiftPlannerService
 
     private array $errors = [];
 
+    private array $warnings = [];
+
     public function __construct()
     {
         $this->company = Auth::user()->company;
@@ -249,7 +251,7 @@ class ShiftPlannerService
         $softConstraint3 = $this->checkIfWorkerWantsToWork($worker, $shiftDate);
 
         if ($softConstraint1) {
-            $this->errors[] = [
+            $this->warnings[] = [
                 'code' => 'worker_cant_work',
                 'worker' => $worker,
                 'shift' => $shiftDate->format('Y-m-d'),
@@ -257,15 +259,15 @@ class ShiftPlannerService
         }
 
         if ($softConstraint2) {
-            $this->errors[] = [
+            $this->warnings[] = [
                 'code' => 'worker_dont_want_to_work',
                 'worker' => $worker,
                 'shift' => $shiftDate->format('Y-m-d'),
             ];
         }
 
-        if ( ! $softConstraint3) {
-            $this->errors[] = [
+        if (! $softConstraint3) {
+            $this->warnings[] = [
                 'code' => 'worker_wants_to_work',
                 'worker' => $worker,
                 'shift' => $shiftDate->format('Y-m-d'),
@@ -389,23 +391,31 @@ class ShiftPlannerService
 
     public function checkIfWorkerDontWantToWorkButCan(User $worker, Carbon $shift): bool
     {
-        $request = $worker->shiftRequests()->where('shift_at', $shift)->first();
+        $request = $worker->shiftRequests()->where('shift_at', $shift->format('Y-m-d'))->first();
 
-        return $request && $request->request === ShiftRequestTypes::CAN_BUT_DONT_WANT_TO_WORK;
+        return $request && $request->request === ShiftRequestTypes::CAN_BUT_DONT_WANT_TO_WORK->value;
     }
 
     public function checkIfWorkerCantWork(User $worker, Carbon $shift): bool
     {
-        $request = $worker->shiftRequests()->where('shift_at', $shift)->first();
+        $request = $worker->shiftRequests()->where('shift_at', $shift->format('Y-m-d'))->first();
 
-        return $request && $request->request === ShiftRequestTypes::CANT_WORK;
+        return $request && $request->request === ShiftRequestTypes::CANT_WORK->value;
     }
 
     public function checkIfWorkerWantsToWork(User $worker, Carbon $shift): bool
     {
-        $request = $worker->shiftRequests()->where('shift_at', $shift)->first();
+        $request = $worker->shiftRequests()->where('shift_at', $shift->format('Y-m-d'))->first();
 
-        return ! $request || $request->request === ShiftRequestTypes::WANT_TO_WORK;
+        if (! $request) {
+            return true;
+        }
+
+        if ($request->request === ShiftRequestTypes::WANT_TO_WORK->value) {
+            return true;
+        }
+
+        return false;
     }
 
     public function checkIfWorkerHasRestAfterMultipleShifts(
@@ -522,6 +532,11 @@ class ShiftPlannerService
         }
 
         return true;
+    }
+
+    public function getWarnings(): array
+    {
+        return $this->warnings;
     }
 
     private function assignWorkerToShift(User $worker, Carbon $shift): array

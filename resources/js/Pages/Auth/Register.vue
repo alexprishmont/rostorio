@@ -3,15 +3,15 @@
   <Authentication>
     <div>
       <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-        Create an account
+        Sukurti paskyrą
       </h2>
       <p class="mt-2 text-center text-sm text-gray-600">
-        Already enjoying Rostor.io?
+        Jau turite paskyrą?
         <Link
-          href="/sign-up"
+          href="/sign-in"
           class="font-medium text-cyan-600 hover:text-sky-500"
         >
-          Sign In
+          Prisijungti
         </Link>
       </p>
     </div>
@@ -33,7 +33,7 @@
           id-name="firstname"
           type="text"
         >
-          First name
+          Vardas
         </Input>
       </div>
 
@@ -43,7 +43,7 @@
           id-name="lastname"
           type="text"
         >
-          Last name
+          Pavardė
         </Input>
       </div>
 
@@ -53,7 +53,7 @@
           id-name="email"
           type="email"
         >
-          Email address
+          Elektroninis paštas
         </Input>
       </div>
 
@@ -63,7 +63,7 @@
           id-name="password"
           type="password"
         >
-          Password
+          Slaptažodis
         </Input>
       </div>
 
@@ -72,7 +72,7 @@
           type="submit"
           class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
         >
-          Sign Up
+          Registruotis
         </button>
       </div>
     </form>

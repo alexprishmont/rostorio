@@ -12,14 +12,9 @@ use Spatie\Permission\Models\Role;
 class RolesSeeder extends Seeder
 {
     private const ROLES = [
-        'Chief Executive Officer',
-        'Chief Operating Officer',
-        'Chief Financial Officer',
-        'Chief Marketing Officer',
-        'Finance manager',
-        'Human resources manager',
-        'Accountant',
-        'Worker',
+        'admin' => 'Įmonės savininkas',
+        'moderator' => 'Žmogiškųjų išteklių vadybininkas',
+        'user' => 'Darbuotojas',
     ];
 
     public function run(): void
@@ -28,10 +23,13 @@ class RolesSeeder extends Seeder
         Role::truncate();
 
         Company::all()->each(function (Company $company): void {
-            foreach (self::ROLES as $role) {
+            foreach (self::ROLES as $code => $role) {
                 Role::create([
                     'name' => $role,
-                    'properties' => json_encode(['company_id' => $company->id]),
+                    'guard_name' => 'company_'.$company->id,
+                    'properties' => json_encode([
+                        'role_code' => $code,
+                    ]),
                 ]);
             }
         });

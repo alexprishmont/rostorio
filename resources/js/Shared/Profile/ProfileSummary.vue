@@ -5,7 +5,7 @@
         id="profile-overview-title"
         class="sr-only"
       >
-        Profile Overview
+        Paskyros apžvalga
       </h2>
       <div class="bg-white p-6">
         <div class="sm:flex sm:items-center sm:justify-between">
@@ -19,7 +19,7 @@
             </div>
             <div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
               <p class="text-sm font-medium text-gray-600">
-                Welcome back,
+                Sveiki sugrįžus,
               </p>
               <p class="text-xl font-bold text-gray-900 sm:text-2xl">
                 {{ $page.props.auth.user.firstname }} {{ $page.props.auth.user.lastname }}
@@ -29,33 +29,27 @@
               </p>
             </div>
           </div>
-          <div class="mt-5 flex justify-center sm:mt-0">
-            <Link
-              :href="`workers/${$page.props.auth.user.id}`"
-              class="flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-            >
-              View profile
-            </Link>
-          </div>
         </div>
       </div>
-      <div class="border-t border-gray-200 bg-gray-50 grid grid-cols-1 divide-y divide-gray-200 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
+      <div class="border-t border-gray-200 bg-gray-50 grid grid-cols-1 divide-y divide-gray-200 sm:grid-cols-2 sm:divide-y-0 sm:divide-x">
         <div class="px-6 py-5 text-sm font-medium text-center">
-          <span class="text-gray-900">12</span>
-          <span class="text-gray-600">Vacation days left</span>
+          <span class="text-gray-900">{{ workHours }}</span>
+          <span class="text-gray-600"> Darbo valandų ši mėnesį</span>
         </div>
 
         <div class="px-6 py-5 text-sm font-medium text-center">
-          <span class="text-gray-900">4</span>
-          <span class="text-gray-600">Sick days left</span>
-        </div>
-
-        <div class="px-6 py-5 text-sm font-medium text-center">
-          <span class="text-gray-900">2</span>
-          <span class="text-gray-600">Personal days left</span>
+          <span class="text-gray-900">{{ shiftsCount }}</span>
+          <span class="text-gray-600"> Pamainos ši mėnesį</span>
         </div>
       </div>
     </div>
   </section>
 </template>
+
+<script setup>
+defineProps({
+    workHours: Number,
+    shiftsCount: Number,
+});
+</script>
 

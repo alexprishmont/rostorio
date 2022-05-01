@@ -17,6 +17,7 @@
       class="bg-white block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
       :required="isRequired"
       :value="modelValue"
+      :disabled="isDisabled"
       @input="handleInput"
     >
   </div>
@@ -29,6 +30,7 @@ defineProps({
     type: String,
     idName: String,
     isRequired: Boolean,
+    isDisabled: Boolean,
 });
 
 const emit = defineEmits(['update:modelValue']);

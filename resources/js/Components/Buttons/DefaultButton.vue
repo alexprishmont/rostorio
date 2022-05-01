@@ -3,6 +3,7 @@
     :type="type"
     class="transition inline-flex items-center px-4 py-2 border border-cyan-500 bg-cyan-500 text-sm leading-4 font-medium rounded-full shadow-sm text-white hover:bg-white hover:text-cyan-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
     :disabled="isLoading"
+    @click="$emit('click')"
   >
     <svg
       v-if="isLoading"
@@ -31,4 +32,6 @@ defineProps({
     isLoading: Boolean,
     type: String,
 });
+
+defineEmits(['click']);
 </script>

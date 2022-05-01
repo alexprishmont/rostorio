@@ -21,4 +21,11 @@ class UpdateCompanyRequest extends FormRequest
             'shifts_ends_at' => ['nullable', 'array'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'name.unique' => 'Pavadinimas jau užregistruotas mūsų sistemoje.',
+        ];
+    }
 }

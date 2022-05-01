@@ -20,4 +20,11 @@ class InitialSetupCompanyStoreRequest extends FormRequest
             'role' => ['required', 'string'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'name.unique' => 'Pavadinimas jau užregistruotas mūsų sistemoje.',
+        ];
+    }
 }

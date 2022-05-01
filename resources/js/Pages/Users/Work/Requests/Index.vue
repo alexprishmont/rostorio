@@ -22,23 +22,41 @@
       @close="closeCreateRequestWindow"
     >
       <template #title>
-        Add a new request
+        Pridėti pageidavimą
       </template>
       <template #body>
         <form @submit.prevent="addNewRequest">
-          <Select
-            v-model="form.request"
-            is-required
-            :list="list"
+          <div
+            class="border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-cyan-600 focus-within:border-cyan-600"
           >
-            Type
-          </Select>
+            <label
+              for="type"
+              class="block text-xs font-medium text-gray-900"
+            >
+              Pageidavimas
+            </label>
+
+            <select
+              id="type"
+              v-model="form.request"
+              class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
+              required
+            >
+              <option
+                v-for="(type, index) in list"
+                :key="index"
+                :value="index"
+              >
+                {{ type }}
+              </option>
+            </select>
+          </div>
 
           <button
             type="submit"
             class="mt-4 transition inline-flex items-center px-4 py-2 border border-cyan-500 bg-cyan-500 text-sm leading-4 font-medium rounded-full shadow-sm text-white hover:bg-white hover:text-cyan-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
           >
-            Add
+            Pridėti
           </button>
         </form>
       </template>
@@ -49,7 +67,6 @@
 <script setup>
 import OneColumnLayout from '@/Layouts/Authenticated/OneColumnLayout';
 import FillableModal from '@/Components/Modals/FillableModal';
-import Select from '@/Components/Inputs/Select';
 import RequestsCalendar from '@/Components/Shifts/RequestsCalendar';
 import {useAvailableScheduleShiftsRequestTypes} from '@/Composables/useAvailableScheduleShiftsRequestTypes';
 import {useCurrentUser} from '@/Composables/useCurrentUser';

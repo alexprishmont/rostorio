@@ -17,7 +17,7 @@
     @close="closeShiftModal"
   >
     <template #title>
-      Edit shift at {{ selectedShift.shift.start }}
+      Redaguoti pamaina - {{ selectedShift.shift.start }}
     </template>
     <template #body>
       <Select
@@ -26,7 +26,7 @@
         id-name="worker"
         :list="workers"
       >
-        Worker
+        Darbuotojas
       </Select>
     </template>
     <template #footer>
@@ -34,13 +34,13 @@
         v-show="workerRequests"
         class="text-sm text-gray-500 pb-2"
       >
-        Request for the shift: <span class="lowercase font-semibold">{{ workerRequests?.title }}</span>
+        Pageidavimas: <span class="lowercase font-semibold">{{ workerRequests?.title }}</span>
       </p>
       <DefaultButton
         type="button"
         @click="saveShift"
       >
-        Save
+        Išsaugoti
       </DefaultButton>
     </template>
   </FillableModal>
@@ -90,7 +90,7 @@ const headerToolbar = ref({
 
 const customButtons = ref({
     startAutomaticGeneration: {
-        text: 'Start automatic generation',
+        text: 'Sugeneruoti darbo grafiką',
         click: () => {
             const date = new Date(currentDate.value).toLocaleDateString('lt-LT', {
                 year: 'numeric',
@@ -99,17 +99,19 @@ const customButtons = ref({
             });
             Inertia.get(`/shifts/generate/${date}`, {}, {
                 preserveState: true,
-                onSuccess: () => {
+                onSuccess: async () => {
                     initialDate.value = new Date(currentDate.value).getTime();
+                    await loadShifts(initialDate.value);
                 },
-                onError: () => {
+                onError: async () => {
                     initialDate.value = new Date(currentDate.value).getTime();
+                    await loadShifts(initialDate.value);
                 }
             });
         },
     },
     saveChanges: {
-        text: 'Save changes',
+        text: 'Išsaugoti',
         click: () => {
             Inertia.post('/shifts/save', companyShifts.value, {
                 onError: () => {
@@ -230,9 +232,12 @@ const datesSet = async info => {
     }
 
     currentDate.value = info.start;
+    await loadShifts(info.start);
+};
 
+const loadShifts = async (date) => {
     const { getShift } = useShifts();
-    companyShifts.value = await getShift(new Date(info.start).toLocaleDateString('lt-LT', {
+    companyShifts.value = await getShift(new Date(date).toLocaleDateString('lt-LT', {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',

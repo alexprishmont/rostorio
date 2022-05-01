@@ -15,6 +15,15 @@ class WorkController extends Controller
 {
     public function index(): Response
     {
-        return Inertia::render('Users/Work/Index');
+        $shiftTime = Auth::user()->company->shifts_begins_at->diffInHours(Auth::user()->company->shifts_ends_at);
+        $shiftsCount = Auth::user()->shifts()->whereBetween(
+            'starts_at',
+            [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()]
+        )->count();
+
+        return Inertia::render('Users/Work/Index', [
+            'totalWorkHours' => $shiftTime * $shiftsCount,
+            'shiftsCount' => $shiftsCount,
+        ]);
     }
 }

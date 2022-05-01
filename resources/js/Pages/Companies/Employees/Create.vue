@@ -1,5 +1,5 @@
 <template>
-  <Head title="Add employee" />
+  <Head title="Pridėti darbuotoją" />
   <OneColumnLayout>
     <section class="rounded-lg bg-white overflow-hidden shadow space-y-8 divide-y divide-gray-200">
       <form
@@ -9,10 +9,10 @@
         <div>
           <div>
             <h3 class="text-lg leading-6 font-medium text-gray-900">
-              Add New Employee
+              Pridėti Naują Darbuotoją
             </h3>
             <p class="mt-1 max-w-2xl text-sm text-gray-500">
-              Add a new employee to your organization
+              Sukurkite darbuotojo paskyrą
             </p>
           </div>
 
@@ -26,7 +26,7 @@
                 id-name="first-name"
                 type="text"
               >
-                First name
+                Vardas
               </Input>
             </div>
             <div class="sm:col-span-3">
@@ -36,7 +36,7 @@
                 id-name="last-name"
                 type="text"
               >
-                Last name
+                Pavardė
               </Input>
             </div>
           </div>
@@ -49,7 +49,7 @@
                 id-name="role"
                 :list="roles"
               >
-                Job position
+                Darbo pozicija
               </Select>
             </div>
           </div>
@@ -62,7 +62,7 @@
                 id-name="email"
                 type="email"
               >
-                Email address
+                Elektroninis paštas
               </Input>
             </div>
             <div class="sm:col-span-3">
@@ -72,17 +72,14 @@
                 id-name="phone-number"
                 type="text"
               >
-                Phone number
+                Telefono numeris
               </Input>
             </div>
           </div>
 
           <div class="mt-6 ml-3 text-sm text-gray-500">
             <p>
-              Please note, that the initial password for the account would be the employee's first name and last name written together (all in lowercase).
-            </p>
-            <p>
-              It should be changed immediately.
+              Pažymime, kad sukurto vartotojo paskyros slaptažodis bus darbuotojo vardas ir pavardė kartu sujungti ir parašyti mažosiomis raidėmis.
             </p>
           </div>
 
@@ -92,7 +89,7 @@
                 type="submit"
                 class="transition inline-flex items-center px-6 py-3 border border-cyan-500 bg-cyan-500 text-base leading-4 font-medium rounded-full shadow-sm text-white hover:bg-white hover:text-cyan-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
               >
-                Save
+                Išsaugoti
               </button>
             </div>
           </div>

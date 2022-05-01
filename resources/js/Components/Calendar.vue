@@ -16,6 +16,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
+import ltLocale from '@fullcalendar/core/locales/lt';
 
 const props = defineProps({
     idName: String,
@@ -106,6 +107,8 @@ const options = reactive({
     showNonCurrentDates: false,
     eventClick: props.eventClick,
     datesSet: props.datesSet,
+    locales: [ ltLocale ],
+    locale: 'lt',
 });
 
 </script>

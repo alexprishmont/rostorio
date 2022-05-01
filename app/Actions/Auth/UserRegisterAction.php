@@ -28,7 +28,7 @@ class UserRegisterAction
 
         UserRegistrationSucceeded::dispatch($user);
 
-        return redirect()->intended('/dashboard')
+        return redirect()->intended('/profile/work')
             ->with('flash', [
                 'type' => 'success',
                 'header' => __('app.success_action'),

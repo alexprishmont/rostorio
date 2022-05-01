@@ -7,7 +7,6 @@ use App\Http\Controllers\Companies\CompanyController;
 use App\Http\Controllers\Companies\Employees\EmployeesController;
 use App\Http\Controllers\Companies\RolesController;
 use App\Http\Controllers\Companies\Setup\CompanySetupController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Shifts\AvailableShiftRequestsTypesController;
 use App\Http\Controllers\Shifts\RequestsController;
 use App\Http\Controllers\Shifts\ShiftsController;
@@ -32,9 +31,6 @@ Route::group(['middleware' => 'guest'], function (): void {
 
 Route::group(['middleware' => ['auth']], function (): void {
     Route::post('/logout', [LogoutController::class, 'store'])->name('logout');
-    Route::resource('dashboard', DashboardController::class)
-        ->breadcrumbs(fn (ResourceBreadcrumbs $breadcrumbs): ResourceBreadcrumbs => $breadcrumbs
-            ->index('Dashboard'));
 
     Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
         Route::resource('settings', SettingsController::class)->only('index');
@@ -42,21 +38,20 @@ Route::group(['middleware' => ['auth']], function (): void {
         Route::group(['prefix' => 'work', 'as' => 'work.'], function (): void {
             Route::resource('requests', ShiftRequestsController::class)
                 ->breadcrumbs(fn (ResourceBreadcrumbs $breadcrumbs): ResourceBreadcrumbs => $breadcrumbs
-                    ->index('Requests for the next month')
-                    ->create('Requests for the next month'));
+                    ->index('Pamainų pageidavimai')
+                    ->create('Pamainų pageidavimai'));
         });
 
         Route::resource('work', WorkController::class)
             ->breadcrumbs(fn (ResourceBreadcrumbs $breadcrumbs): ResourceBreadcrumbs => $breadcrumbs
-                ->index('My work'));
+                ->index('Pradinis'));
     });
 
     Route::resource('shifts', ShiftsController::class)
         ->only(['index', 'create'])
         ->breadcrumbs(fn (ResourceBreadcrumbs $breadcrumbs): ResourceBreadcrumbs => $breadcrumbs
-            ->index('Shifts')
-            ->create('Generate shifts scheduling for next month')
-            ->edit('Swap shifts'));
+            ->index('Darbo grafikas')
+            ->create('Darbo grafiko valdymas'));
 
     Route::group(['prefix' => 'shifts', 'as' => 'shifts.'], function (): void {
         Route::get(
@@ -81,19 +76,24 @@ Route::group(['middleware' => ['auth']], function (): void {
 
         Route::resource('roles', RolesController::class)
             ->breadcrumbs(fn (ResourceBreadcrumbs $breadcrumbs): ResourceBreadcrumbs => $breadcrumbs
-                ->index('Roles & permissions'));
+                ->index('Vartotojų rolės'));
 
         Route::resource('employees', EmployeesController::class)
             ->breadcrumbs(fn (ResourceBreadcrumbs $breadcrumbs): ResourceBreadcrumbs => $breadcrumbs
-                ->index('Employees')
-                ->create('Add new employee')
+                ->index('Darbuotojai')
+                ->create('Pridėti naują darbuotoją')
                 ->show(fn (User $user): string => sprintf('%s %s', $user->firstname, $user->lastname))
-                ->edit('Edit'));
+                ->edit('Redaguoti'));
+
+        Route::group(['prefix' => 'employees', 'as' => 'employees.'], function (): void {
+            Route::put('/{employee}/removeRole', [EmployeesController::class, 'removeRole']);
+            Route::post('/{employee}/addRole', [EmployeesController::class, 'addRole']);
+        });
     });
 
     Route::resource('company', CompanyController::class)
         ->breadcrumbs(fn (ResourceBreadcrumbs $breadcrumbs): ResourceBreadcrumbs => $breadcrumbs
-            ->index('Company')
+            ->index('Įmonė')
             ->show(fn (Company $company): string => sprintf('%s', $company->name))
-            ->edit('Edit'));
+            ->edit('Redaguoti'));
 });

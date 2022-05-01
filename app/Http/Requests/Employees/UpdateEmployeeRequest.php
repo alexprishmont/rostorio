@@ -24,6 +24,9 @@ class UpdateEmployeeRequest extends FormRequest
             'address.house_number' => ['nullable', 'string'],
             'address.zip' => ['nullable', 'string'],
             'address.phone' => ['nullable', 'string'],
+            'role.id' => ['nullable', 'numeric'],
+            'role.name' => ['nullable', 'string'],
+            'role.oldRoleId' => ['nullable', 'numeric'],
         ];
     }
 }

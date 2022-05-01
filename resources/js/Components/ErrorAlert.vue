@@ -9,8 +9,8 @@
       </div>
       <div class="ml-3">
         <h3 class="text-sm font-medium text-red-800">
-          <span v-if="Object.keys($page.props.errors).length === 1">There is one error</span>
-          <span v-else>There were {{ Object.keys($page.props.errors).length }} errors.</span>
+          <span v-if="Object.keys($page.props.errors).length === 1">Klaida</span>
+          <span v-else>Veiksmo atlikimo metu atsitiko {{ Object.keys($page.props.errors).length }} klaidos.</span>
         </h3>
         <div class="mt-2 text-sm text-red-700">
           <ul
@@ -32,7 +32,4 @@
 
 <script setup>
 import {XCircleIcon} from '@heroicons/vue/solid';
-import {watch} from 'vue';
-import {usePage} from '@inertiajs/inertia-vue3';
-
 </script>

@@ -20,7 +20,7 @@ class LoginControllerTest extends TestCase
                 'email' => 'test@example.com',
                 'password' => '123123'
             ])
-            ->assertRedirect('http://localhost/dashboard');
+            ->assertRedirect('http://localhost/profile/work');
     }
 
     public function test_it_redirects_back_if_credentials_are_wrong(): void

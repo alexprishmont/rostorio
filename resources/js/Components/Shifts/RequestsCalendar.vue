@@ -10,6 +10,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
+import ltLocale from '@fullcalendar/core/locales/lt';
 
 import {useShiftRequests} from '@/Composables/useShiftRequests';
 
@@ -20,7 +21,7 @@ const props = defineProps({
     droppable: Boolean,
     userId: Number,
     headerToolbar: Object,
-    initialDate: String,
+    initialDate: Number,
 });
 
 const {getRequestsByUserId} = useShiftRequests();
@@ -54,6 +55,8 @@ const options = reactive({
     firstDay: 1,
     showNonCurrentDates: false,
     events,
+    locales: [ ltLocale ],
+    locale: 'lt',
 });
 
 const reloadEvents = async () => {

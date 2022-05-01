@@ -54,7 +54,8 @@ class ShiftsController extends Controller
         $service->getShiftsForMonth($date->format('Y-m'));
         $errors = [];
 
-        foreach ($service->getErrors() as $error) {
+        $report = array_merge($service->getErrors(), $service->getWarnings());
+        foreach ($report as $error) {
             $errors[] = sprintf(
                 '%s',
                 __(
@@ -67,8 +68,8 @@ class ShiftsController extends Controller
             );
         }
 
-        if (!empty($errors)) {
-            return back()->withErrors($errors);
+        if (! empty($errors)) {
+            return back()->with('report', $errors);
         }
 
         return back()
@@ -91,6 +92,7 @@ class ShiftsController extends Controller
             $date = Carbon::parse($shift['starts_at']);
 
             $service->fulfillsHardConstraints($worker, $date);
+            $service->fulfillsSoftConstraints($worker, $date);
         }
 
         $serviceErrors = $service->getErrors();
@@ -111,7 +113,7 @@ class ShiftsController extends Controller
             );
         }
 
-        if (!empty($errors)) {
+        if (! empty($errors)) {
             return back()->withErrors($errors);
         }
 
@@ -120,14 +122,10 @@ class ShiftsController extends Controller
         session()->flash('flash', [
             'type' => 'success',
             'header' => __('app.success_action'),
-            'text' => 'Changes successfully saved.',
+            'text' => __('app.success_message'),
         ]);
 
-        return back()->with('flash', [
-            'type' => 'success',
-            'header' => __('app.success_action'),
-            'text' => 'Changes successfully saved.',
-        ]);
+        return back();
     }
 
     public function getByDate(Request $request, string $date)
@@ -147,7 +145,7 @@ class ShiftsController extends Controller
             $shifts = $shifts->get();
         }
 
-        if (! empty($query) && isset($query['userId'])) {
+        if (!empty($query) && isset($query['userId'])) {
             $shifts = $shifts->where('user_id', $query['userId'])->get();
         }
 

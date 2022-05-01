@@ -1,5 +1,5 @@
 <template>
-  <Head title="Workers" />
+  <Head title="Darbuotojai" />
   <TwoColumnsLayout>
     <template #left>
       <div class="flex flex-col">
@@ -13,19 +13,19 @@
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                     >
-                      Name
+                      Vardas Pavardė
                     </th>
                     <th
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                     >
-                      Title
+                      Rolė
                     </th>
                     <th
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                     >
-                      Status
+                      Statusas
                     </th>
                   </tr>
                 </thead>
@@ -68,11 +68,11 @@
                         }"
                       >
                         <span v-if="statuses[user.id]">
-                          Online
+                          Prisijungęs
                         </span>
 
                         <span v-else>
-                          Offline
+                          Atsijungęs
                         </span>
                       </span>
                     </td>
@@ -88,7 +88,7 @@
     <template #right>
       <section class="rounded-lg bg-gray-200 overflow-hidden shadow divide-y divide-gray-200 sm:divide-y-0 sm:grid sm:grid-cols-1 sm:gap-px">
         <h2 class="sr-only">
-          Actions
+          Veiksmai
         </h2>
         <div class="rounded-tl-lg rounded-tr-lg sm:rounded-tr-none relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:border-cyan-500">
           <div class="flex">
@@ -105,11 +105,11 @@
                     class="absolute inset-0"
                     aria-hidden="true"
                   />
-                  Add employee
+                  Sukurti darbuotojo paskyrą
                 </Link>
               </h3>
               <p class="text-sm text-gray-500 font-normal">
-                You can invite a new employee to your organization.
+                Galite pridėti darbuotoją prie įmonės sukurdami jam paskyrą.
               </p>
             </div>
           </div>
