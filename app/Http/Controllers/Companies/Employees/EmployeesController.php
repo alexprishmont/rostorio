@@ -64,6 +64,10 @@ class EmployeesController extends Controller
         );
 
         if ($user) {
+            $role = Role::query()
+                ->where('name', $role)
+                ->where('guard_name', 'company_'.$user->company->id)
+                ->first();
             $user->assignRole($role);
             $addressAction->execute($user, $address);
 
@@ -117,6 +121,10 @@ class EmployeesController extends Controller
             $employee->update($attributes);
         }
 
+        if (Arr::has($attributes, 'email')) {
+            $employee->update(['email' => $attributes['email']]);
+        }
+
         if (Arr::has($attributes, 'address')) {
             $addressAttributes = Arr::get($attributes, 'address');
             $employee->address->update($addressAttributes);
@@ -138,11 +146,11 @@ class EmployeesController extends Controller
             ->first();
 
         if (! $role) {
-            return back()->withErrors(['Employee already has the role']);
+            return back()->withErrors(['already_has_role' => 'Employee already has the role']);
         }
 
         if ($employee->hasRole($role)) {
-            return back()->withErrors(['Employee already has the role']);
+            return back()->withErrors(['already_has_role' => 'Employee already has the role']);
         }
 
         $employee->assignRole($role);
@@ -159,10 +167,10 @@ class EmployeesController extends Controller
         $attributes = $request->all();
 
         if ($employee->roles()->count() <= 1) {
-            return back()->withErrors(['Cannot remove last role.']);
+            return back()->withErrors(['last_role' => 'Cannot remove last role.']);
         }
 
-        $role = Role::findById($attributes['id']);
+        $role = Role::findById($attributes['id'], 'company_'.$employee->company->id);
         $employee->removeRole($role);
 
         return back()->with('flash', [

@@ -6,11 +6,19 @@ namespace Tests\Feature\Http\Controllers\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 class LoginControllerTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_it_renders_login_form_on_index_page(): void
+    {
+        $this->get(route('login'))
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('Auth/Login'));
+    }
 
     public function test_it_redirects_to_dashboard_if_credentials_are_correct(): void
     {
@@ -18,7 +26,7 @@ class LoginControllerTest extends TestCase
         $this->from(route('login'))
             ->post(route('login'), [
                 'email' => 'test@example.com',
-                'password' => '123123'
+                'password' => '123123',
             ])
             ->assertRedirect('http://localhost/profile/work');
     }
@@ -28,7 +36,7 @@ class LoginControllerTest extends TestCase
         $this->from(route('login'))
             ->post(route('login'), [
                 'email' => 'test@email.com',
-                'password' => '123123'
+                'password' => '123123',
             ])
             ->assertRedirect('http://localhost/sign-in');
     }
@@ -38,7 +46,7 @@ class LoginControllerTest extends TestCase
         $this->from(route('login'))
             ->post(route('login'), [
                 'email' => 'test@email.com',
-                'password' => '123123'
+                'password' => '123123',
             ])
             ->assertSessionHasErrors(['email']);
     }

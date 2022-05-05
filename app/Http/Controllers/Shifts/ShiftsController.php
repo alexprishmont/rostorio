@@ -47,7 +47,7 @@ class ShiftsController extends Controller
 
         if ($shifts->count() > 0) {
             return back()->withErrors([
-                __('app.schedule.cannot_generate'),
+                'already_generated' => __('app.schedule.cannot_generate'),
             ]);
         }
 
@@ -145,7 +145,7 @@ class ShiftsController extends Controller
             $shifts = $shifts->get();
         }
 
-        if (!empty($query) && isset($query['userId'])) {
+        if (! empty($query) && isset($query['userId'])) {
             $shifts = $shifts->where('user_id', $query['userId'])->get();
         }
 

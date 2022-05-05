@@ -23,8 +23,6 @@ class CompanyController extends Controller
 
     public function update(UpdateCompanyRequest $request, Company $company): RedirectResponse
     {
-        $this->authorize('update', $company);
-
         $attributes = $request->validated();
 
         if (empty($attributes)) {

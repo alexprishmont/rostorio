@@ -18,7 +18,8 @@ class RegisterControllerTest extends TestCase
     private array $credentials = [
         'email' => 'test@example.com',
         'password' => '123123123',
-        'name' => 'Larry Doe',
+        'firstname' => 'Larry',
+        'lastname' => 'Doe',
     ];
 
     public function test_it_returns_register_vue_component(): void
@@ -53,11 +54,11 @@ class RegisterControllerTest extends TestCase
     {
         $this->from('/sign-up')
             ->post('/sign-up', $this->credentials)
-            ->assertRedirect(route('dashboard.index'))
+            ->assertRedirect(route('profile.work.index'))
             ->assertSessionHas('flash', [
                 'type' => 'success',
                 'header' => __('app.success_action'),
-                'text' => __('auth.registration_success')
+                'text' => __('auth.registration_success'),
             ]);
     }
 

@@ -33,13 +33,21 @@ class ShiftRequestsController extends Controller
             $attributes,
         );
 
-        return back();
+        return back()->with('flash', [
+            'type' => 'success',
+            'header' => __('app.success_action'),
+            'text' => __('app.success_action'),
+        ]);
     }
 
     public function destroy(Request $request): RedirectResponse
     {
         $request->delete();
 
-        return back();
+        return back()->with('flash', [
+            'type' => 'success',
+            'header' => __('app.success_action'),
+            'text' => __('app.success_action'),
+        ]);
     }
 }

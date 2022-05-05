@@ -65,7 +65,7 @@ Route::group(['middleware' => ['auth']], function (): void {
 
         Route::post('/save', [ShiftsController::class, 'save'])->name('save');
         Route::get('/generate/{date}', [ShiftsController::class, 'generate'])->name('generate');
-        Route::get('/getByDate/{date}', [ShiftsController::class, 'getByDate']);
+        Route::get('/getByDate/{date}', [ShiftsController::class, 'getByDate'])->name('getByDate');
     });
 
     Route::group(['prefix' => 'company', 'as' => 'company.'], function () {
@@ -86,8 +86,8 @@ Route::group(['middleware' => ['auth']], function (): void {
                 ->edit('Redaguoti'));
 
         Route::group(['prefix' => 'employees', 'as' => 'employees.'], function (): void {
-            Route::put('/{employee}/removeRole', [EmployeesController::class, 'removeRole']);
-            Route::post('/{employee}/addRole', [EmployeesController::class, 'addRole']);
+            Route::put('/{employee}/removeRole', [EmployeesController::class, 'removeRole'])->name('removeRole');
+            Route::post('/{employee}/addRole', [EmployeesController::class, 'addRole'])->name('addRole');
         });
     });
 

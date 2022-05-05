@@ -21,8 +21,8 @@ class StoreEmployeeRequest extends FormRequest
             'lastname' => ['required', 'string'],
             'email' => ['required', 'email', 'unique:users'],
             'phone' => ['required', 'phone:LT'],
-            'role' => ['required', Rule::exists('roles', 'name')],
-            'created_by_organization' => ['required', 'bool'],
+            'role' => ['required'],
+            'created_by_organization' => ['nullable', 'bool'],
         ];
     }
 
